@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Resume Screening System</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#14161f;--mute:#5d6377;--line:#e3e6ef;--acc:#4f46e5;--acc2:#7c3aed;--ok:#0f9d6b;--bad:#d9485f;--chip:#eef0fb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1117;--card:#181b25;--ink:#eceef6;--mute:#9aa1b8;--line:#2a2f3f;--acc:#8b85ff;--acc2:#b18cff;--ok:#3ddc9a;--bad:#ff7a90;--chip:#232838}}
+:root[data-theme="dark"]{--bg:#0f1117;--card:#181b25;--ink:#eceef6;--mute:#9aa1b8;--line:#2a2f3f;--acc:#8b85ff;--acc2:#b18cff;--ok:#3ddc9a;--bad:#ff7a90;--chip:#232838}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.hero{padding:64px 0 40px;text-align:center}
+.badge{display:inline-block;padding:4px 14px;border-radius:99px;background:var(--chip);color:var(--acc);font-size:13px;font-weight:600}
+h1{font-size:clamp(32px,6vw,52px);line-height:1.1;margin:18px 0 12px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:620px;margin:0 auto 26px;color:var(--mute);font-size:18px}
+.btn{display:inline-block;border:0;border-radius:10px;padding:11px 20px;font:600 15px inherit;font-family:inherit;cursor:pointer;background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--line)}
+.btn.sm{padding:7px 13px;font-size:13px}
+section{padding:28px 0}
+h2{font-size:26px;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.card h3{margin:0 0 10px;font-size:17px}
+.step{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;align-items:center;justify-content:center;font-size:13px;margin-right:8px}
+textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg);color:var(--ink);font:14px/1.5 inherit;font-family:inherit;resize:vertical}
+textarea{min-height:110px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.res{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.res .top{display:flex;gap:8px;margin-bottom:8px}
+.x{border:0;background:transparent;color:var(--bad);font-size:20px;cursor:pointer}
+.hint{font-size:13px;color:var(--mute)}
+.chip{display:inline-block;padding:2px 9px;margin:2px 3px 2px 0;border-radius:99px;font-size:12px;background:var(--chip)}
+.chip.ok{color:var(--ok)}.chip.bad{color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:var(--bg);border-radius:12px;padding:10px 14px}
+.stat b{display:block;font-size:20px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600;font-size:12px;text-transform:uppercase}
+.bar{height:8px;border-radius:9px;background:var(--line);width:110px;margin-top:5px}
+.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.grid .card{margin:0}
+.grid .n{font-size:28px}
+.w{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:14px}.w span:first-child{width:110px}.w .bar{flex:1;width:auto}
+footer{padding:30px 0 40px;text-align:center;color:var(--mute);font-size:14px}
+.msg{color:var(--bad);font-size:14px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <span class="badge">NLP · TF-IDF · Decision support</span>
+  <h1>AI Resume Screening System</h1>
+  <p>Paste a job description, add resumes, and get every candidate scored and ranked in seconds, with the reasons shown.</p>
+  <a class="btn" href="#tool">Try it now</a> <a class="btn ghost" href="#how">How it works</a>
+</header>
+
+<section id="tool">
+  <h2>Screen candidates</h2>
+  <p class="sub">Everything runs in your browser. No resume leaves your device.</p>
+  <div class="card">
+    <h3><span class="step">1</span>Job description</h3>
+    <textarea id="jd" placeholder="Paste the job description here…"></textarea>
+  </div>
+  <div class="card">
+    <h3><span class="step">2</span>Resumes</h3>
+    <div id="list"></div>
+    <div class="row">
+      <button class="btn ghost sm" id="add">+ Add resume</button>
+      <label class="btn ghost sm">Upload .txt files<input id="file" type="file" accept=".txt,.md" multiple hidden></label>
+      <button class="btn ghost sm" id="sample">Load sample data</button>
+    </div>
+    <p class="hint">For PDF or Word resumes, copy the text and paste it into a resume box.</p>
+  </div>
+  <button class="btn" id="go">Screen candidates</button>
+  <div class="msg" id="msg"></div>
+  <div class="card" id="out" hidden style="margin-top:18px"></div>
+</section>
+
+<section id="how">
+  <h2>How it works</h2>
+  <p class="sub">Four simple stages, each easy to inspect.</p>
+  <div class="grid">
+    <div class="card"><div class="n">🔎</div><h3>1. Extract</h3>Skills, education level and years of experience are pulled from each resume and from the job description.</div>
+    <div class="card"><div class="n">🧮</div><h3>2. Compare</h3>TF-IDF vectors and cosine similarity measure how closely the wording of a resume matches the job.</div>
+    <div class="card"><div class="n">📊</div><h3>3. Score</h3>Four sub-scores are combined with weights into one match percentage.</div>
+    <div class="card"><div class="n">🏆</div><h3>4. Rank</h3>Candidates are sorted, with matched and missing skills listed for quick review.</div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Scoring weights</h3>
+    <div class="w"><span>Skill match</span><div class="bar"><i style="width:50%"></i></div><b>50%</b></div>
+    <div class="w"><span>Text similarity</span><div class="bar"><i style="width:25%"></i></div><b>25%</b></div>
+    <div class="w"><span>Experience</span><div class="bar"><i style="width:15%"></i></div><b>15%</b></div>
+    <div class="w"><span>Education</span><div class="bar"><i style="width:10%"></i></div><b>10%</b></div>
+  </div>
+</section>
+<footer>This is a decision-support tool. It ranks candidates to save time; final hiring decisions stay with the recruiter.</footer>
+</div>
+
+<script>
+const SK={python:["python"],java:["java"],"c++":["c++"],"c#":["c#"],javascript:["javascript","js"],typescript:["typescript"],sql:["sql","mysql","postgresql","postgres","sqlite"],mongodb:["mongodb","mongo"],react:["react","reactjs"],"node.js":["node.js","nodejs","node"],django:["django"],flask:["flask"],fastapi:["fastapi"],html:["html","html5"],css:["css","css3"],git:["git","github","gitlab"],docker:["docker"],kubernetes:["kubernetes","k8s"],aws:["aws","amazon web services"],azure:["azure"],gcp:["gcp","google cloud"],linux:["linux","unix"],"machine learning":["machine learning","ml"],"deep learning":["deep learning"],nlp:["nlp","natural language processing"],"computer vision":["computer vision","opencv"],tensorflow:["tensorflow"],pytorch:["pytorch"],"scikit-learn":["scikit-learn","sklearn"],pandas:["pandas"],numpy:["numpy"],"data analysis":["data analysis","data analytics"],"data visualization":["data visualization","tableau","power bi","matplotlib"],statistics:["statistics","statistical analysis"],"rest api":["rest api","rest apis","restful"],"ci/cd":["ci/cd","jenkins","github actions"],agile:["agile","scrum"],leadership:["leadership","team lead"],excel:["excel"]};
+const EDU=[[4,/\b(ph\.?d|doctorate)\b/],[3,/\b(master'?s?|m\.?tech|mtech|m\.?sc|msc|mca|mba)\b/],[2,/\b(bachelor'?s?|b\.?tech|btech|b\.e|b\.?sc|bsc|bca)\b/],[1,/\bdiploma\b/]];
+const EN=["Not found","Diploma","Bachelor’s","Master’s","PhD"];
+const STOP=new Set("a an the and or of to in for with on at by is are was were be as it this that from your you we our will have has had not but can their they who which about into".split(" "));
+const W={sk:.5,tx:.25,ex:.15,ed:.1};
+const $=id=>document.getElementById(id);
+const clean=t=>t.toLowerCase().replace(/\s+/g," ").trim();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function skills(t){t=clean(t);const f=new Set();for(const[k,al]of Object.entries(SK))for(const a of al){if(new RegExp("(?<![\\w+#.])"+a.replace(/[.*+?^${}()|[\]\\\/]/g,"\\$&")+"(?![\\w+#])").test(t)){f.add(k);break}}return f}
+function edu(t){t=clean(t);for(const[l,r]of EDU)if(r.test(t))return l;return 0}
+function yrList(t){return[...clean(t).matchAll(/(\d+(?:\.\d+)?)\s*\+?\s*(?:years?|yrs?)/g)].map(m=>+m[1])}
+function years(t){t=clean(t);let s=0;const Y=new Date().getFullYear();for(const m of t.matchAll(/((?:19|20)\d{2})\s*(?:-|–|to)\s*((?:19|20)\d{2}|present|current)/g)){const e=/^\d/.test(m[2])?+m[2]:Y;s+=Math.max(0,e-+m[1])}return Math.max(0,s,...yrList(t))}
+function toks(t){const w=clean(t).replace(/[^a-z0-9+#.\s]/g," ").split(" ").map(x=>x.replace(/^\.+|\.+$/g,"")).filter(x=>x&&!STOP.has(x));const o=[...w];for(let i=0;i<w.length-1;i++)o.push(w[i]+" "+w[i+1]);return o}
+function cosines(jd,docs){
+  const all=[jd,...docs].map(t=>{const c={};toks(t).forEach(x=>c[x]=(c[x]||0)+1);return c});
+  const n=all.length,df={};all.forEach(c=>Object.keys(c).forEach(k=>df[k]=(df[k]||0)+1));
+  const vec=all.map(c=>{const v={};let s=0;for(const k in c){const w=(1+Math.log(c[k]))*(Math.log((1+n)/(1+df[k]))+1);v[k]=w;s+=w*w}s=Math.sqrt(s)||1;for(const k in v)v[k]/=s;return v});
+  return vec.slice(1).map(v=>{let d=0;for(const k in v)if(vec[0][k])d+=v[k]*vec[0][k];return d});
+}
+
+let state=[{name:"",text:""}];
+function draw(){
+  $("list").innerHTML=state.map((r,i)=>`<div class="res"><div class="top"><input type="text" data-n="${i}" placeholder="Candidate ${i+1} name" value="${esc(r.name)}"><button class="x" data-d="${i}" title="Remove">×</button></div><textarea data-t="${i}" placeholder="Paste resume text…">${esc(r.text)}</textarea></div>`).join("");
+}
+$("list").addEventListener("input",e=>{const t=e.target;if(t.dataset.n!==undefined)state[t.dataset.n].name=t.value;if(t.dataset.t!==undefined)state[t.dataset.t].text=t.value});
+$("list").addEventListener("click",e=>{if(e.target.dataset.d!==undefined){state.splice(e.target.dataset.d,1);if(!state.length)state.push({name:"",text:""});draw()}});
+$("add").onclick=()=>{state.push({name:"",text:""});draw()};
+$("file").onchange=async e=>{
+  state=state.filter(r=>r.text.trim()||r.name.trim());
+  for(const f of e.target.files)state.push({name:f.name.replace(/\.\w+$/,""),text:await f.text()});
+  if(!state.length)state.push({name:"",text:""});draw();e.target.value=""};
+$("sample").onclick=()=>{
+  $("jd").value="We are hiring a Python Developer with 3+ years of experience.\nA Bachelor's degree is required.\nRequired skills: Python, SQL, machine learning, scikit-learn, Docker, REST API.";
+  state=[{name:"Alice Sharma",text:"B.Tech in Computer Science. 4 years experience as a data engineer.\nSkills: Python, SQL, scikit-learn, machine learning, Docker, REST APIs."},
+  {name:"Bob Patel",text:"Diploma in Web Design. 1 year experience building websites.\nSkills: HTML, CSS, JavaScript, React."},
+  {name:"Carol Mehta",text:"M.Sc in Statistics. 2019 - 2024 data scientist.\nSkills: Python, pandas, machine learning, SQL."}];
+  draw()};
+
+$("go").onclick=()=>{
+  const jd=$("jd").value,R=state.map((r,i)=>({...r,name:r.name.trim()||"Candidate "+(i+1)})).filter(r=>r.text.trim());
+  $("msg").textContent="";
+  if(!jd.trim()||!R.length){$("msg").textContent="Please add a job description and at least one resume with text.";return}
+  const js=skills(jd),yl=yrList(jd),minY=yl.length?Math.min(...yl):0,minE=edu(jd);
+  const sims=cosines(jd,R.map(r=>r.text));
+  const rows=R.map((r,i)=>{
+    const s=skills(r.text),ma=[...s].filter(x=>js.has(x)).sort(),mi=[...js].filter(x=>!s.has(x)).sort();
+    const sk=js.size?ma.length/js.size:sims[i],y=years(r.text),ex=minY?Math.min(y/minY,1):1,e=edu(r.text),ed=minE?Math.min(e/minE,1):1,tx=Math.min(sims[i]*2.5,1);
+    return{name:r.name,total:(W.sk*sk+W.tx*tx+W.ex*ex+W.ed*ed)*100,sk:sk*100,y,e,ma,mi};
+  }).sort((a,b)=>b.total-a.total);
+  const chips=(a,c)=>a.length?a.map(x=>`<span class="chip ${c}">${esc(x)}</span>`).join(""):'<span class="hint">none</span>';
+  $("out").hidden=false;
+  $("out").innerHTML=`<h3>Job requirements detected</h3>
+  <div class="stats"><div class="stat"><b>${js.size}</b>skills</div><div class="stat"><b>${minY||"–"}</b>min. years</div><div class="stat"><b>${EN[minE]}</b>min. education</div></div>
+  <div style="margin-bottom:16px">${chips([...js].sort(),"")}</div>
+  <h3>Ranked candidates</h3><div class="scroll"><table><thead><tr><th>#</th><th>Candidate</th><th>Match</th><th>Experience</th><th>Education</th><th>Matched skills</th><th>Missing skills</th></tr></thead><tbody>`+
+  rows.map((r,i)=>`<tr><td><b>${i+1}</b></td><td>${esc(r.name)}</td><td><b>${r.total.toFixed(1)}%</b><div class="bar"><i style="width:${r.total}%"></i></div></td><td>${r.y} yrs</td><td>${EN[r.e]}</td><td>${chips(r.ma,"ok")}</td><td>${chips(r.mi,"bad")}</td></tr>`).join("")+`</tbody></table></div>`;
+  $("out").scrollIntoView({behavior:"smooth"});
+};
+draw();
+</script>
+</body>
+</html>
